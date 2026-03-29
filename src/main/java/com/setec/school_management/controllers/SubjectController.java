@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.setec.school_management.dtos.subject_dto.SubjectReponseDto;
 import com.setec.school_management.dtos.subject_dto.SubjectRequestDto;
 
-import com.setec.school_management.models.Subject;
+
 import com.setec.school_management.services.SubjectService;
 
 import jakarta.validation.Valid;

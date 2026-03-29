@@ -2,7 +2,7 @@ package com.setec.school_management.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.setec.school_management.dtos.student_dto.StudentRequestDto;
 import com.setec.school_management.dtos.student_dto.StudentResponseDto;
-import com.setec.school_management.models.Student;
+
 import com.setec.school_management.services.StudentService;
 
 import jakarta.validation.Valid;
