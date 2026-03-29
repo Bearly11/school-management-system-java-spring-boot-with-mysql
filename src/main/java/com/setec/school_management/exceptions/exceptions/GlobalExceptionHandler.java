@@ -16,6 +16,21 @@ import io.swagger.v3.oas.annotations.Hidden;
 @RestControllerAdvice
 @Hidden
 public class GlobalExceptionHandler {
+        @ExceptionHandler(BadRequestException.class)
+        public ResponseEntity<ErrorMessage> badRequestException(BadRequestException ex,
+                        WebRequest request
+        ) 
+        {
+                ErrorMessage message = new ErrorMessage(
+                                HttpStatus.BAD_REQUEST.value(),
+                                new Date(),
+                                ex.getMessage(),
+                                request.getDescription(false));
+                return new ResponseEntity<ErrorMessage>(message, HttpStatus.BAD_REQUEST);
+                    
+                }
+
+
         @ExceptionHandler(MyResourceNotFoundException.class)
         public ResponseEntity<ErrorMessage> resourceNotFoundException(MyResourceNotFoundException ex,
                         WebRequest request) {

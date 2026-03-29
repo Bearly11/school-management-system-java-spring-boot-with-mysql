@@ -10,5 +10,7 @@ import com.setec.school_management.models.Subject;
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
     List<Subject> findBySubjectNameContainingIgnoreCase(String subjectname);
+    boolean existsBySubjectName(String subjectName);
+    boolean existsBySubjectNameAndIdNot(String subjectName, Long id);
    
 }

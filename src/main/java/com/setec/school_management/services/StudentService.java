@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.setec.school_management.dtos.student_dto.StudentRequestDto;
 import com.setec.school_management.dtos.student_dto.StudentResponseDto;
+import com.setec.school_management.exceptions.exceptions.BadRequestException;
+import com.setec.school_management.exceptions.exceptions.MyResourceNotFoundException;
 import com.setec.school_management.mappers.student_mappers.StudentMapper;
 import com.setec.school_management.repositories.StudentRepository;
 
@@ -41,7 +43,7 @@ public class StudentService {
 
     public StudentResponseDto updateStudent(Long id, StudentRequestDto studentDetails) {
        var student = _studentRepository.findById(id).orElseThrow(()->
-                new RuntimeException("Student not found"));
+                new MyResourceNotFoundException("Student not found"));
                 student.setFirstname(studentDetails.getFirstname());
                 student.setLastname(studentDetails.getLastname());
                 student.setGender(studentDetails.getGender());
@@ -55,7 +57,7 @@ public class StudentService {
 
     public void deleteStudent(Long id) {
        if (!_studentRepository.existsById(id)) {
-            throw new RuntimeException("Student not found with id " + id);
+            throw new MyResourceNotFoundException("Student not found with id " + id);
         }
         _studentRepository.deleteById(id);
     
@@ -63,7 +65,7 @@ public class StudentService {
 
     public StudentResponseDto getById(Long id) {
         var student = _studentRepository.findById(id).orElseThrow(()->
-                new RuntimeException("Student not found"));
+                new MyResourceNotFoundException("Student not found"));
         
         return _studentMapper.toDto(student);
         

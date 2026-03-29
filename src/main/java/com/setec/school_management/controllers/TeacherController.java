@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.setec.school_management.models.Student;
-import com.setec.school_management.models.Teacher;
 import com.setec.school_management.services.TeacherService;
+
+import jakarta.validation.Valid;
+
+import com.setec.school_management.dtos.teacher_dto.TeacherReponseDto;
+import com.setec.school_management.dtos.teacher_dto.TeacherRequestDto;
 
 @RestController
 @RequestMapping("api/v1/teacher/")
@@ -27,26 +30,28 @@ public class TeacherController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllTeachers() {
+    public ResponseEntity<List<TeacherReponseDto>> getAllTeachers() {
        var teachers = _teacherService.getAllTeachers();
         return ResponseEntity.ok(teachers);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public ResponseEntity<TeacherReponseDto> getById(@PathVariable Long id) {
        var teacher = _teacherService.getById(id);
         return ResponseEntity.ok(teacher);
     }
 
     @PostMapping("")
-    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher) {
+    public ResponseEntity<TeacherReponseDto> createTeacher(@Valid @RequestBody TeacherRequestDto teacher) {
+      
         var teachers = _teacherService.createTeacher(teacher);
-        return ResponseEntity.ok(teachers);
+       
+        return ResponseEntity.status(201).body(teachers);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateTeacher(@PathVariable Long id,
-            @RequestBody Teacher teacher) {
+    public ResponseEntity<TeacherReponseDto> updateTeacher(@PathVariable Long id,
+             @Valid @RequestBody TeacherRequestDto teacher) {
         return ResponseEntity.ok(_teacherService.updateTeacher(id, teacher));
     }
 
@@ -57,16 +62,16 @@ public class TeacherController {
     }
 
     @GetMapping("search")
-    public ResponseEntity<List<Teacher>> findByName(@RequestParam String name) {
+    public ResponseEntity<List<TeacherReponseDto>> findByName(@RequestParam String name) {
         var teachers = _teacherService.findByName(name);
         return ResponseEntity.ok(teachers);
     }
 
     @GetMapping("paginated")
-    public ResponseEntity<List<Teacher>> getPaginatedTeachers(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<List<TeacherReponseDto>> getPaginatedTeachers(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         // Assuming you have a method in your service to fetch paginated students
-        var teachers = _teacherService.getPaginatedStudents(page, size);
+        var teachers = _teacherService.getPaginatedTeachers(page, size);
         return ResponseEntity.ok(teachers);
     }
 }

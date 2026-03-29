@@ -2,71 +2,74 @@ package com.setec.school_management.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.setec.school_management.dtos.subject_dto.SubjectReponseDto;
+import com.setec.school_management.dtos.subject_dto.SubjectRequestDto;
+import com.setec.school_management.exceptions.exceptions.BadRequestException;
+import com.setec.school_management.exceptions.exceptions.MyResourceNotFoundException;
+import com.setec.school_management.mappers.subject_mappers.SubjectMapper;
 import com.setec.school_management.models.Subject;
 import com.setec.school_management.repositories.SubjectRepository;
 
+
 @Service
 public class SubjectService {
-    @Autowired
+   
     private final SubjectRepository _subjectRepository;
+    private final SubjectMapper _subjectMapper;
 
-    public SubjectService(SubjectRepository subjectRepository) {
+    public SubjectService(SubjectRepository subjectRepository, SubjectMapper subjectMapper) {
         this._subjectRepository = subjectRepository;
+        this._subjectMapper = subjectMapper;
     }
 
-    public List<Subject> getAllSubjects() {
-        return _subjectRepository.findAll();
+    public List<SubjectReponseDto> getAllSubjects() {
+        return _subjectRepository.findAll().stream()
+                .map(_subjectMapper::toDto)
+                .toList();
     }
 
-    public Subject getById(Long id) {
-        var subject = _subjectRepository.findById(id).orElse(null);
-        if (subject == null) {
-            throw new RuntimeException("Subject not found with id " + id);
+    public SubjectReponseDto getById(Long id) {
+        var subject = _subjectRepository.findById(id).
+                orElseThrow(() -> new MyResourceNotFoundException("Subject not found with id " + id));
+        return _subjectMapper.toDto(subject);
+        
+    }
+
+    
+    public SubjectReponseDto createSubject(SubjectRequestDto dto) {
+        if(_subjectRepository.existsBySubjectName(dto.getSubjectName())) {
+            throw new BadRequestException("Subject name already exists");
         }
-        return subject;
+        var subject = _subjectMapper.toEntity(dto);
+        return _subjectMapper.toDto(_subjectRepository.save(subject));
+
     }
 
-    @Transactional
-    public Subject createSubject(Subject subject) {
-        var existingSubject = _subjectRepository.findAll().stream()
-                .filter(s -> s.getSubjectName().equalsIgnoreCase(subject.getSubjectName()))
-                .findFirst()
-                .orElse(null);
-        if (existingSubject != null) {
-            throw new RuntimeException("Subject with name " + subject.getSubjectName() + " already exists");
+    public SubjectReponseDto updateSubject(Long id,SubjectRequestDto dto) {
+        var subject = _subjectRepository.findById(id)
+                .orElseThrow(() -> new MyResourceNotFoundException("Subject not found with id " + id));
+        if(_subjectRepository.existsBySubjectNameAndIdNot(dto.getSubjectName(), id)) {
+            throw new BadRequestException("Subject name already exists");
         }
-        return _subjectRepository.save(subject);
-
-    }
-
-    public Subject updateSubject(Long id, Subject subject) {
-        return _subjectRepository.findById(id).map(Subject -> {
-            Subject.setSubjectName(subject.getSubjectName());
-            var existingSubject = _subjectRepository.findAll().stream()
-                    .filter(s -> s.getSubjectName().equalsIgnoreCase(subject.getSubjectName()))
-                    .findFirst()
-                    .orElse(null);
-            if (existingSubject != null) {
-                throw new RuntimeException("Subject with name " + subject.getSubjectName() + " already exists");
-            }
-            return _subjectRepository.save(Subject);
-        }).orElseThrow(() -> new RuntimeException("Subject not found with id " + id));
+        subject.setSubjectName(dto.getSubjectName());
+        return _subjectMapper.toDto(_subjectRepository.save(subject));
+       
     }
 
     public void deleteSubject(Long id) {
         if (!_subjectRepository.existsById(id)) {
-            throw new RuntimeException("Subject not found with id " + id);
+            throw new MyResourceNotFoundException("Subject not found with id " + id);
         }
         _subjectRepository.deleteById(id); 
          
     }
 
-    public List<Subject> findByName(String subjectname) {
-        return _subjectRepository.findBySubjectNameContainingIgnoreCase(subjectname);
+    public List<SubjectReponseDto> findByName(String subjectname) {
+        return _subjectRepository.findBySubjectNameContainingIgnoreCase(subjectname).stream()
+                .map(_subjectMapper::toDto)
+                .toList();
     }
 
     
