@@ -2,14 +2,14 @@ package com.setec.school_management.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
 import com.setec.school_management.dtos.student_dto.StudentRequestDto;
 import com.setec.school_management.dtos.student_dto.StudentResponseDto;
-import com.setec.school_management.exceptions.exceptions.BadRequestException;
+
 import com.setec.school_management.exceptions.exceptions.MyResourceNotFoundException;
 import com.setec.school_management.mappers.student_mappers.StudentMapper;
 import com.setec.school_management.repositories.StudentRepository;

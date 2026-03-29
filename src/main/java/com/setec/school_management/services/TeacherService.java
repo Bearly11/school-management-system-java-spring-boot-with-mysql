@@ -9,7 +9,7 @@ import com.setec.school_management.dtos.teacher_dto.TeacherReponseDto;
 import com.setec.school_management.dtos.teacher_dto.TeacherRequestDto;
 import com.setec.school_management.mappers.teacher_mappers.TeacherMapper;
 import com.setec.school_management.exceptions.exceptions.MyResourceNotFoundException;
-import com.setec.school_management.models.Teacher;
+
 import com.setec.school_management.repositories.TeacherRepository;
 
 @Service
@@ -67,7 +67,10 @@ public class TeacherService {
     }
     public List<TeacherReponseDto> getPaginatedTeachers(int page, int size) {
         var pageAble = PageRequest.of(page, size);
-        var teachers = _teacherRepository.findAll().stream().map(_teacherMapper::toDto).toList(); 
+        var teachers = _teacherRepository.findAll(pageAble).getContent()
+                .stream()
+                .map(_teacherMapper::toDto)
+                .toList();
         return teachers;
         
     }

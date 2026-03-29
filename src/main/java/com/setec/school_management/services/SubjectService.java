@@ -9,7 +9,7 @@ import com.setec.school_management.dtos.subject_dto.SubjectRequestDto;
 import com.setec.school_management.exceptions.exceptions.BadRequestException;
 import com.setec.school_management.exceptions.exceptions.MyResourceNotFoundException;
 import com.setec.school_management.mappers.subject_mappers.SubjectMapper;
-import com.setec.school_management.models.Subject;
+
 import com.setec.school_management.repositories.SubjectRepository;
 
 
