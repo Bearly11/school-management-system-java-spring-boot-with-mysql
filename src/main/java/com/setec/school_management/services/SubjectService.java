@@ -2,9 +2,9 @@ package com.setec.school_management.services;
 
 import java.util.List;
 
+import com.setec.school_management.dtos.subject_dto.SubjectResponseDto;
 import org.springframework.stereotype.Service;
 
-import com.setec.school_management.dtos.subject_dto.SubjectReponseDto;
 import com.setec.school_management.dtos.subject_dto.SubjectRequestDto;
 import com.setec.school_management.exceptions.exceptions.BadRequestException;
 import com.setec.school_management.exceptions.exceptions.MyResourceNotFoundException;
@@ -24,13 +24,13 @@ public class SubjectService {
         this._subjectMapper = subjectMapper;
     }
 
-    public List<SubjectReponseDto> getAllSubjects() {
+    public List<SubjectResponseDto> getAllSubjects() {
         return _subjectRepository.findAll().stream()
                 .map(_subjectMapper::toDto)
                 .toList();
     }
 
-    public SubjectReponseDto getById(Long id) {
+    public SubjectResponseDto getById(Long id) {
         var subject = _subjectRepository.findById(id).
                 orElseThrow(() -> new MyResourceNotFoundException("Subject not found with id " + id));
         return _subjectMapper.toDto(subject);
@@ -38,7 +38,7 @@ public class SubjectService {
     }
 
     
-    public SubjectReponseDto createSubject(SubjectRequestDto dto) {
+    public SubjectResponseDto createSubject(SubjectRequestDto dto) {
         if(_subjectRepository.existsBySubjectName(dto.getSubjectName())) {
             throw new BadRequestException("Subject name already exists");
         }
@@ -47,7 +47,7 @@ public class SubjectService {
 
     }
 
-    public SubjectReponseDto updateSubject(Long id,SubjectRequestDto dto) {
+    public SubjectResponseDto updateSubject(Long id, SubjectRequestDto dto) {
         var subject = _subjectRepository.findById(id)
                 .orElseThrow(() -> new MyResourceNotFoundException("Subject not found with id " + id));
         if(_subjectRepository.existsBySubjectNameAndIdNot(dto.getSubjectName(), id)) {
@@ -66,7 +66,7 @@ public class SubjectService {
          
     }
 
-    public List<SubjectReponseDto> findByName(String subjectname) {
+    public List<SubjectResponseDto> findByName(String subjectname) {
         return _subjectRepository.findBySubjectNameContainingIgnoreCase(subjectname).stream()
                 .map(_subjectMapper::toDto)
                 .toList();

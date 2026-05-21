@@ -17,7 +17,7 @@ import com.setec.school_management.repositories.StudentRepository;
 @Service
 public class StudentService {
    
-    private StudentMapper _studentMapper;
+    private final StudentMapper _studentMapper;
     private final StudentRepository _studentRepository;
     public StudentService(StudentRepository studentRepository,StudentMapper studentMapper) {
         this._studentRepository = studentRepository;

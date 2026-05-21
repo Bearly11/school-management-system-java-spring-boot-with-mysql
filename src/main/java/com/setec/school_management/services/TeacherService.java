@@ -2,10 +2,10 @@ package com.setec.school_management.services;
 
 import java.util.List;
 
+import com.setec.school_management.dtos.teacher_dto.TeacherResponseDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.setec.school_management.dtos.teacher_dto.TeacherReponseDto;
 import com.setec.school_management.dtos.teacher_dto.TeacherRequestDto;
 import com.setec.school_management.mappers.teacher_mappers.TeacherMapper;
 import com.setec.school_management.exceptions.exceptions.MyResourceNotFoundException;
@@ -21,7 +21,7 @@ public class TeacherService {
         this._teacherRepository = teacherRepository;
         this._teacherMapper = teacherMapper;
     }
-    public List<TeacherReponseDto> getAllTeachers() {
+    public List<TeacherResponseDto> getAllTeachers() {
         var teachers = this._teacherRepository.findAll()
                 .stream()
                 .map(_teacherMapper::toDto)
@@ -29,19 +29,19 @@ public class TeacherService {
         return teachers;
     }
     
-    public TeacherReponseDto getById(Long id) {
+    public TeacherResponseDto getById(Long id) {
        var teacher = _teacherRepository.findById(id)
                 .orElseThrow(()-> new MyResourceNotFoundException("Teacher not found with id " + id));
         
         return _teacherMapper.toDto(teacher);
     }
-    public TeacherReponseDto createTeacher(TeacherRequestDto dto) {
+    public TeacherResponseDto createTeacher(TeacherRequestDto dto) {
        
         var teacherEntity = _teacherMapper.toEntity(dto);         
         var savedTeacher = _teacherRepository.save(teacherEntity);
         return _teacherMapper.toDto(savedTeacher);
     }
-    public TeacherReponseDto updateTeacher(Long id, TeacherRequestDto teacher) {
+    public TeacherResponseDto updateTeacher(Long id, TeacherRequestDto teacher) {
         var existingTeacher = _teacherRepository.findById(id)
                 .orElseThrow(() -> new MyResourceNotFoundException("Teacher not found with id " + id));
         existingTeacher.setFirstName(teacher.getFirstName());
@@ -58,14 +58,14 @@ public class TeacherService {
           }
           _teacherRepository.deleteById(id);
     }
-    public List<TeacherReponseDto> findByName(String name) {
+    public List<TeacherResponseDto> findByName(String name) {
         var teachers = _teacherRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name)
                 .stream()
                 .map(_teacherMapper::toDto)
                 .toList();
         return teachers;
     }
-    public List<TeacherReponseDto> getPaginatedTeachers(int page, int size) {
+    public List<TeacherResponseDto> getPaginatedTeachers(int page, int size) {
         var pageAble = PageRequest.of(page, size);
         var teachers = _teacherRepository.findAll(pageAble).getContent()
                 .stream()

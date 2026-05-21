@@ -2,7 +2,7 @@ package com.setec.school_management.dtos.teacher_dto;
 
 import java.time.LocalDate;
 
-public class TeacherReponseDto {
+public class TeacherResponseDto {
     private String firstName;
     private String lastName;
     private String gender;

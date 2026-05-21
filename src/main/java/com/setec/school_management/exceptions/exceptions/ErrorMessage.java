@@ -15,6 +15,22 @@ public class ErrorMessage {
     this.description = description;
   }
 
+  public void setStatusCode(int statusCode) {
+    this.statusCode = statusCode;
+  }
+
+  public void setTimestamp(Date timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public int getStatusCode() {
     return statusCode;
   }

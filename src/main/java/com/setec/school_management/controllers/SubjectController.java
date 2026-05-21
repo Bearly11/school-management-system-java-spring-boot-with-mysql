@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.setec.school_management.dtos.subject_dto.SubjectReponseDto;
+import com.setec.school_management.dtos.subject_dto.SubjectResponseDto;
 import com.setec.school_management.dtos.subject_dto.SubjectRequestDto;
 
 
@@ -31,27 +31,27 @@ public class SubjectController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<SubjectReponseDto>> getAllSubjects() {
+    public ResponseEntity<List<SubjectResponseDto>> getAllSubjects() {
         var subjects = _subjectService.getAllSubjects();
         return ResponseEntity.ok(subjects);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<SubjectReponseDto> getById(@PathVariable Long id) {
+    public ResponseEntity<SubjectResponseDto> getById(@PathVariable Long id) {
         var subject = _subjectService.getById(id);
         return ResponseEntity.ok(subject);
     }
 
 
     @PostMapping("")
-    public ResponseEntity<SubjectReponseDto> createSubject(@Valid @RequestBody SubjectRequestDto subject) {
+    public ResponseEntity<SubjectResponseDto> createSubject(@Valid @RequestBody SubjectRequestDto subject) {
         var subjects = _subjectService.createSubject(subject);
         return ResponseEntity.status(201).body(subjects);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubjectReponseDto> updateSubject(@Valid @PathVariable Long id,
-            @RequestBody SubjectRequestDto subject) {
+    public ResponseEntity<SubjectResponseDto> updateSubject(@Valid @PathVariable Long id,
+                                                            @RequestBody SubjectRequestDto subject) {
         return ResponseEntity.ok(_subjectService.updateSubject(id, subject));
     }
 
@@ -62,7 +62,7 @@ public class SubjectController {
     }
 
     @GetMapping("search")
-    public ResponseEntity<List<SubjectReponseDto>> findByName(@RequestParam String subjectname) {
+    public ResponseEntity<List<SubjectResponseDto>> findByName(@RequestParam String subjectname) {
         var subjects = _subjectService.findByName(subjectname);
         return ResponseEntity.ok(subjects);
     }
